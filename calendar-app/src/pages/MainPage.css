@@ -1,0 +1,125 @@
+/* Общие стили */
+.main-page {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #ff9fea;
+  color: white;
+  box-shadow: 0 2px 6px rgba(255, 127, 206, 0.1);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.create-event-btn {
+  background-color: white;
+  color: #ff7ed4;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.create-event-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.event-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ff3b30;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+/* Header с переключением месяца */
+.header {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.month-switcher {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.month-switcher h2 {
+  margin: 0;
+  color: #555;
+}
+
+.month-switcher button {
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.month-switcher button:hover {
+  background-color: #d0d0d0;
+}
+
+/* Календарь */
+.calendar {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f5f7;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.day:hover {
+  background-color: #e7ebef;
+  cursor: pointer;
+}
+
+.today {
+  background-color: #ff8cd3;
+  color: white;
+  font-weight: bold;
+}
