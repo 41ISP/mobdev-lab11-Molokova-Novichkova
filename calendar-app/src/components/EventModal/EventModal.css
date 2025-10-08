@@ -1,51 +1,63 @@
-.modal-backdrop {
+.modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.4);
+  inset: 0;
+  background: rgba(0,0,0,0.4);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-in;
+  z-index: 10;
 }
 
 .modal {
-  background: white;
+  background: #fff;
+  padding: 20px 25px;
   border-radius: 10px;
-  padding: 20px;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  width: 320px;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .modal input {
-  padding: 8px;
-  border: 1px solid #ccc;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.modal input:focus {
+  border-color: #e985f0;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  margin-top: 10px;
 }
 
-.modal-buttons button {
-  padding: 6px 12px;
+.modal button {
+  padding: 8px 14px;
   border: none;
+  background: #e985f0;
+  color: #fff;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.modal-buttons button:first-child {
-  background-color: #e177ff;
-  color: white;
+.modal button:hover {
+  background: #e985f0;
 }
 
-.modal-buttons button:last-child {
-  background-color: #ccc;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

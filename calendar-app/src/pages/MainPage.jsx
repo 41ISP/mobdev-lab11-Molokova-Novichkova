@@ -88,14 +88,19 @@ export default function MainPage() {
             const isSelected = day && day === selectedDay;
             const hasEvents = events.some(e => e.date === `${year}-${month + 1}-${day}`);
             return (
-              <div
-                key={i}
-                className={`day ${isSelected ? "selected" : ""}`}
-                onClick={() => handleDayClick(day)}
-              >
-                {day}
-                {hasEvents && <div className="event-dot"></div>}
-              </div>
+<div
+  key={i}
+  className={`day ${isSelected ? "selected" : ""}`}
+  onClick={() => handleDayClick(day)}
+  title={
+    events
+      .filter(e => e.date === `${year}-${month + 1}-${day}`)
+      .map(e => e.title)
+      .join(", ")
+  }>
+  {day}
+  {hasEvents && <div className="event-dot"></div>}
+  </div>
             );
           })}
         </div>
@@ -108,10 +113,16 @@ export default function MainPage() {
             <p className="no-events">Нет событий</p>
           ) : (
             <ul>
-              {dayEvents.map((e, i) => (
-                <li key={i}>{e.title}</li>
-              ))}
-            </ul>
+               {dayEvents.map((e, i) => (
+    <li key={i}>
+      {e.title}
+      <button
+        className="delete-btn"
+        onClick={() => setEvents(events.filter(ev => ev !== e))}
+        >🗑 </button>
+        </li>
+      ))}
+      </ul>
           )}
         </div>
       )}
