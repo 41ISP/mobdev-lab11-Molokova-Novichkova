@@ -6,7 +6,7 @@ export default function MainPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [events, setEvents] = useState([]); //события
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
   const storedEvents = JSON.parse(localStorage.getItem("calendarEvents")) || [];
@@ -37,7 +37,7 @@ export default function MainPage() {
 
   const handleDayClick = (day) => {
     if (!day) return;
-  setCurrentDay(day === selectedDay ? null : day);
+  setSelectedDay(day === selectedDay ? null : day);
   }; 
 
   const handleAddEvent = () => {
@@ -63,40 +63,59 @@ export default function MainPage() {
         <button onClick={handleAddEvent}>+ Событие</button>
       </nav>
 
-        <div className="controls">
-          <select value={month} onChange={handleMonthChange}>
-          {monthNames.map((name,index) => (
-          <option key={index} value={index}>{name}</option>
+      <div className="controls">
+        <select value={month} onChange={handleMonthChange}>
+          {monthNames.map((name, index) => (
+            <option key={index} value={index}>{name}</option>
           ))}
-          </select>
+        </select>
 
-    
+        <select value={year} onChange={handleYearChange}>
+          {Array.from({ length: 11 }, (_, i) => year - 5 + i).map((y) => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
+      </div>
+
       <div className="calendar">
         <div className="weekdays">
-          {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day, index) => (
-            <div key={index} className="weekday">{day}</div>
+          {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((d) => (
+            <div key={d} className="weekday">{d}</div>
           ))}
         </div>
-
         <div className="days-grid">
-          {calendarDays.map((day, index) => {
-            const dayEvents = events.filter(
-              e => e.date === `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`
-            );
+          {days.map((day, i) => {
+            const isSelected = day && day === selectedDay;
+            const hasEvents = events.some(e => e.date === `${year}-${month + 1}-${day}`);
             return (
               <div
-                key={index}
-                className={`day ${day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear() ? "today" : ""}`}
+                key={i}
+                className={`day ${isSelected ? "selected" : ""}`}
+                onClick={() => handleDayClick(day)}
               >
                 {day}
-                {dayEvents.length > 0 && <div className="event-dot"></div>}
+                {hasEvents && <div className="event-dot"></div>}
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Event Modal */}
+      {selectedDay && (
+        <div className="event-list">
+          <h3>События {selectedDay} {monthNames[month]} {year}</h3>
+          {dayEvents.length === 0 ? (
+            <p className="no-events">Нет событий</p>
+          ) : (
+            <ul>
+              {dayEvents.map((e, i) => (
+                <li key={i}>{e.title}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       <EventModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

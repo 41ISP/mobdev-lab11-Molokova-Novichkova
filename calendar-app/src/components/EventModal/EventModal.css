@@ -12,9 +12,9 @@
 }
 
 .modal {
-  background-color: #fff;
-  padding: 20px 30px;
+  background: white;
   border-radius: 10px;
+  padding: 20px;
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -23,8 +23,8 @@
 
 .modal input {
   padding: 8px;
-  border-radius: 6px;
   border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 1rem;
 }
 
@@ -36,13 +36,13 @@
 
 .modal-buttons button {
   padding: 6px 12px;
-  border-radius: 6px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 .modal-buttons button:first-child {
-  background-color: #0078ff;
+  background-color: #e177ff;
   color: white;
 }
 

@@ -1,39 +1,38 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./EventModal.css";
 
 export default function EventModal({ isOpen, onClose, onSave }) {
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+ 
 
-  const handleSave = () => {
-    if (!title || !date) {
-      alert("Введите название события и дату!");
-      return;
-    }
-    onSave({ title, date });
-    setTitle("");
-    setDate("");
-  };
+ useEffect(() => {
+    if (isOpen) setTitle("");
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>Создать событие</h2>
+        <h2>Новое событие</h2>
         <input
           type="text"
-          placeholder="Название события"
+          placeholder="Введите название события"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
         <div className="modal-buttons">
-          <button onClick={handleSave}>Сохранить</button>
+          <button
+            onClick={() => {
+              if (title.trim() === "") {
+                alert("Введите название!");
+                return;
+              }
+              onSave({ title });
+            }}
+          >
+            Сохранить
+          </button>
           <button onClick={onClose}>Отмена</button>
         </div>
       </div>

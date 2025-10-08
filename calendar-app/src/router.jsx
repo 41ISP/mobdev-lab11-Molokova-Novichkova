@@ -1,4 +1,3 @@
-// src/router.jsx
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainPage from "./pages/MainPage";

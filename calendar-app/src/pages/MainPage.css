@@ -1,89 +1,47 @@
-/* Общие стили */
 .main-page {
-  font-family: "Segoe UI", Roboto, sans-serif;
-  background-color: #f9fafb;
-  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
 }
 
-/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #ff9fea;
+  background-color: #e177ff;
   color: white;
-  box-shadow: 0 2px 6px rgba(255, 127, 206, 0.1);
+  padding: 10px 20px;
+  border-radius: 10px;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.create-event-btn {
+.navbar button {
   background-color: white;
-  color: #ff7ed4;
+  color: #e177ff;
   border: none;
-  padding: 8px 16px;
   border-radius: 6px;
+  padding: 6px 12px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
 }
 
-.create-event-btn:hover {
-  background-color: #e0e0e0;
-}
-
-.event-dot {
-  width: 8px;
-  height: 8px;
-  background-color: #ff3b30;
-  border-radius: 50%;
-  margin-top: 4px;
-}
-
-/* Header с переключением месяца */
-.header {
+.controls {
   display: flex;
   justify-content: center;
+  gap: 10px;
   margin: 20px 0;
 }
 
-.month-switcher {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.month-switcher h2 {
-  margin: 0;
-  color: #555;
-}
-
-.month-switcher button {
-  background-color: #e0e0e0;
-  border: none;
+.controls select {
+  padding: 6px;
+  font-size: 1rem;
   border-radius: 6px;
-  font-size: 1.5rem;
-  padding: 4px 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.month-switcher button:hover {
-  background-color: #d0d0d0;
-}
-
-/* Календарь */
 .calendar {
-  background: #fff;
-  border-radius: 10px;
+  background-color: white;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  max-width: 800px;
-  margin: 0 auto 40px auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .weekdays {
@@ -91,35 +49,64 @@
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   font-weight: bold;
-  color: #666;
+  color: #555;
   margin-bottom: 10px;
 }
 
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 6px;
 }
 
 .day {
+  background-color: #f4f6fa;
   height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f4f5f7;
   border-radius: 8px;
-  font-size: 1rem;
-  color: #333;
-  transition: all 0.2s ease;
+  text-align: center;
+  line-height: 80px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
 }
 
 .day:hover {
-  background-color: #e7ebef;
-  cursor: pointer;
+  background-color: #dfe8ff;
 }
 
-.today {
-  background-color: #ff8cd3;
+.day.selected {
+  background-color: #e177ff;
   color: white;
   font-weight: bold;
+}
+
+.event-dot {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff3b30;
+}
+
+.event-list {
+  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.event-list h3 {
+  margin-top: 0;
+}
+
+.event-list ul {
+  padding-left: 20px;
+}
+
+.no-events {
+  color: #777;
 }
