@@ -1,211 +1,108 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fff4fa;
-}
-
-.main-page {
+.container {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-/* Навигация */
-.navbar {
+h1 {
+  text-align: center;
+  color: #e985f0;
+}
+
+.calendar-controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #e873b5;
-}
-
-.navbar button {
-  padding: 8px 14px;
-  background-color: #e873b5;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.navbar button:hover {
-  background-color: #d85ea1;
-}
-
-/* Контролы */
-.controls {
-  display: flex;
-  gap: 15px;
+  gap: 10px;
+  justify-content: center;
   margin-bottom: 15px;
 }
 
-.controls select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #f2a9cf;
-  font-size: 16px;
-  background-color: #fff;
-  color: #555;
-}
-
-/* Прокручиваемый список годов */
-.year-select-wrapper {
-  position: relative;
-  width: 100px;
-  max-height: 130px;
-  overflow-y: auto;
-  border-radius: 8px;
-  border: 1px solid #f2a9cf;
-  background: #fff;
-}
-
-.year-select {
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  text-align: center;
-  cursor: pointer;
-  background: transparent;
-  scroll-behavior: smooth;
-}
-
-.year-select option {
-  padding: 5px 0;
-}
-
-.year-select option:hover,
-.year-select option:focus {
-  background-color: #ffe0ec;
-}
-
-/* Календарь */
-.calendar {
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(255, 182, 217, 0.5);
-}
-
-.weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 10px;
-}
-
-.weekday {
-  text-align: center;
-  font-weight: bold;
-  color: #555;
-}
-
-.weekday.weekend {
-  background: #ffeef7;
-  border-radius: 6px;
-}
-
-/* Сетка дней */
-.days-grid {
+.calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
 }
 
-/* Дни */
+.weekday {
+  text-align: center;
+  font-weight: bold;
+  color: #e985f0;
+}
+
 .day {
-  position: relative;
   height: 60px;
+  border-radius: 6px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  align-items: center;
   cursor: pointer;
+  position: relative;
+  background: #ffe6f0;
+  transition: background 0.2s;
 }
 
 .day:hover {
-  background: rgba(232, 115, 181, 0.1);
+  background: #ffcce6;
 }
 
-.day.weekend {
-  background-color: #fff6fa;
+.weekend {
+  background: #f2d6e6;
 }
 
-.day.selected {
-  background: linear-gradient(135deg, #e873b5, #ffb6d9);
-  color: #fff;
-  box-shadow: 0 0 10px rgba(232, 115, 181, 0.7);
+.selected {
+  border: 2px solid #e985f0;
 }
 
-/* Точки событий */
-.event-dot {
-  position: absolute;
-  bottom: 6px;
-  width: 7px;
-  height: 7px;
-  background-color: #e873b5;
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #e985f0;
   border-radius: 50%;
-  animation: pulse 2s infinite;
+  position: absolute;
+  bottom: 5px;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.6; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* Список событий */
 .event-list {
-  margin-top: 20px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(255, 182, 217, 0.5);
+  margin-top: 15px;
+  background: #ffe6f0;
+  padding: 10px;
+  border-radius: 8px;
 }
 
-.event-list h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #e873b5;
-}
-
-.event-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.event-list li {
-  background: #fff0f7;
-  margin: 4px 0;
-  padding: 6px 10px;
-  border-radius: 6px;
+.event-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 5px;
 }
 
-.delete-btn {
-  background: transparent;
+.event-item button {
+  background: #e985f0;
+  color: #fff;
   border: none;
-  color: #ff6f9c;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
-  transition: 0.2s ease;
+  padding: 2px 6px;
 }
 
-.delete-btn:hover {
-  color: #d84c80;
+.event-item button:hover {
+  background: #d870c4;
 }
 
-.no-events {
-  font-style: italic;
-  color: #888;
+button {
+  background: #e985f0;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #d870c4;
+}
+
+.error {
+  color: red;
+  text-align: center;
 }

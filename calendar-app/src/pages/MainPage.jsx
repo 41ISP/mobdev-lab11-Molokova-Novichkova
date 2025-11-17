@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from "react";
-import "./MainPage.css";
-import EventModal from "../components/EventModal";
+import { useEffect, useState } from "react";
+import "./MainPage";
 
-export default function MainPage() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+
+const MainPage = () => {
+  const [events, setEvents] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    const storedEvents = JSON.parse(localStorage.getItem("calendarEvents")) || [];
-    setEvents(storedEvents);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("calendarEvents", JSON.stringify(events));
-  }, [events]);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [error, setError] = useState(null);
 
   const monthNames = [
     "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -24,135 +16,123 @@ export default function MainPage() {
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
+
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDay = new Date(year, month, 1).getDay();
   const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+  const days = Array(startOffset).fill("").concat(
+    Array.from({ length: daysInMonth }, (_, i) => i + 1)
+  );
 
-  const days = Array(startOffset).fill("").concat(Array.from({ length: daysInMonth }, (_, i) => i + 1));
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        const data = await getEvents();
+        setEvents(data.items || []);
+      } catch (err) {
+        setError("Ошибка при загрузке событий Google Calendar");
+        console.error(err);
+      }
+    };
+    loadEvents();
+  }, []);
 
-  const handleMonthChange = (e) => {
-    setCurrentDate(new Date(year, parseInt(e.target.value), 1));
-  };
+  const handleAddEvent = async (title) => {
+    if (!selectedDay) return alert("Выбери день!");
+    const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
 
-  const handleYearChange = (e) => {
-    setCurrentDate(new Date(parseInt(e.target.value), month, 1));
-  };
-
-  const handleDayClick = (day) => {
-    if (!day) return;
-    setSelectedDay(day === selectedDay ? null : day);
-  };
-
-  const handleAddEvent = () => {
-    if (!selectedDay) {
-      alert("Выберите дату!");
-      return;
+    try {
+      const newEvent = await addEvent(title, date);
+      setEvents([...events, newEvent]);
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      alert("Не удалось добавить событие!");
     }
-    setIsModalOpen(true);
   };
 
-  const handleSaveEvent = (event) => {
-    const dateKey = `${year}-${month + 1}-${selectedDay}`;
-    setEvents([...events, { ...event, date: dateKey }]);
-    setIsModalOpen(false);
+  const handleDeleteEvent = async (id) => {
+    try {
+      await deleteEvent(id);
+      setEvents(events.filter(e => e.id !== id));
+    } catch {
+      alert("Ошибка при удалении события!");
+    }
   };
 
-  const handleDeleteEvent = (event) => {
-    setEvents(events.filter(e => e !== event));
-  };
-
-  const selectedDateKey = selectedDay ? `${year}-${month + 1}-${selectedDay}` : null;
-  const dayEvents = events.filter(e => e.date === selectedDateKey);
+  const dayEvents = events.filter(e => {
+    const d = e.start?.date || e.start?.dateTime?.split("T")[0];
+    return d === `${year}-${String(month + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+  });
 
   return (
-    <div className="main-page">
-      <nav className="navbar">
-        <h1 className="logo">Мой Календарь</h1>
-        <button onClick={handleAddEvent}>+ Событие</button>
-      </nav>
+    <div className="container">
+      <h1>📅 Мой Google-Календарь</h1>
 
-      <div className="controls">
-        <select value={month} onChange={handleMonthChange}>
-          {monthNames.map((name, index) => (
-            <option key={index} value={index}>{name}</option>
+      {error && <p className="error">{error}</p>}
+
+      <div className="calendar-controls">
+        <select
+          value={month}
+          onChange={(e) => setCurrentDate(new Date(year, e.target.value, 1))}
+        >
+          {monthNames.map((m, i) => (
+            <option key={i} value={i}>{m}</option>
           ))}
         </select>
 
-        <div className="year-select-wrapper">
-          <select
-            size="5"
-            value={year}
-            onChange={handleYearChange}
-            className="year-select"
-          >
-            {Array.from({ length: 51 }, (_, i) => year - 25 + i).map((y) => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
-        </div>
+        <input
+          type="number"
+          value={year}
+          onChange={(e) => setCurrentDate(new Date(+e.target.value, month, 1))}
+        />
       </div>
 
-      <div className="calendar">
-        <div className="weekdays">
-          {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((d, i) => (
+      <div className="calendar-grid">
+        {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map(d => (
+          <div key={d} className="weekday">{d}</div>
+        ))}
+
+        {days.map((day, i) => {
+          const hasEvent = events.some(e =>
+            (e.start?.date || e.start?.dateTime?.split("T")[0]) ===
+            `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+          );
+          const isWeekend = (i % 7 === 5 || i % 7 === 6);
+          return (
             <div
-              key={d}
-              className={`weekday ${i >= 5 ? "weekend" : ""}`}
+              key={i}
+              onClick={() => day && setSelectedDay(day)}
+              className={`day ${isWeekend ? "weekend" : ""} ${day === selectedDay ? "selected" : ""}`}
             >
-              {d}
+              {day}
+              {hasEvent && <div className="dot"></div>}
             </div>
-          ))}
-        </div>
-
-        <div className="days-grid">
-          {days.map((day, i) => {
-            const isSelected = day && day === selectedDay;
-            const dayOfWeek = (i % 7);
-            const isWeekend = day && (dayOfWeek === 5 || dayOfWeek === 6);
-            const hasEvents = events.some(e => e.date === `${year}-${month + 1}-${day}`);
-
-            return (
-              <div
-                key={i}
-                className={`day ${isSelected ? "selected" : ""} ${isWeekend ? "weekend" : ""}`}
-                onClick={() => handleDayClick(day)}
-              >
-                {day}
-                {hasEvents && <div className="event-dot"></div>}
-              </div>
-            );
-          })}
-        </div>
+          );
+        })}
       </div>
 
       {selectedDay && (
         <div className="event-list">
           <h3>События {selectedDay} {monthNames[month]} {year}</h3>
-          {dayEvents.length === 0 ? (
-            <p className="no-events">Нет событий</p>
-          ) : (
-            <ul>
-              {dayEvents.map((e, i) => (
-                <li key={i}>
-                  <span className="event-title">{e.title}</span>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteEvent(e)}
-                  >
-                    🗑
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+          {dayEvents.length === 0 && <p>Нет событий</p>}
+          {dayEvents.map(e => (
+            <div key={e.id} className="event-item">
+              <span>{e.summary}</span>
+              <button onClick={() => handleDeleteEvent(e.id)}>🗑</button>
+            </div>
+          ))}
+          <button onClick={() => setIsModalOpen(true)}>+ Добавить событие</button>
         </div>
       )}
 
       <EventModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveEvent}
+        onSave={handleAddEvent}
       />
     </div>
   );
-}
+};
+
+export default MainPage;
